@@ -45,9 +45,11 @@
             name = "main";
             src = ./src;
             entrypoint = "main.saty";
+            output = "main.pdf";
           };
         };
-        defaultPackage = self.packages."${system}".main;
+        packages.default = self.packages."${system}".main;
+        defaultPackage = self.packages."${system}".default;
 
         devShell = pkgs.devshell.mkShell {
           imports = [
