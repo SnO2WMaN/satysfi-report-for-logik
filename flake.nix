@@ -29,7 +29,7 @@
         };
       in rec {
         packages = rec {
-          satydist = pkgs.satyxin.buildSatydist {
+          satysfiDist = pkgs.satyxin.buildSatysfiDist {
             packages = [
               "uline"
               "bibyfi"
@@ -39,7 +39,9 @@
             ];
           };
           main = pkgs.satyxin.buildDocument {
-            inherit satydist;
+            inherit satysfiDist;
+            satysfiLocal = ./.satysfi/local;
+
             name = "main";
             src = ./src;
             entrypoint = "main.saty";
