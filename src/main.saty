@@ -1,18 +1,135 @@
-@require: stdjareport
+@require: morebook
 @require: uline/uline
+@require: sno2wman/sno2wman
+@require: fss/fss
+@require: fss/style
+@require: fss/fonts
+@require: enumitem/enumitem
+@import: ./first-order-propositional/main
+@import: ./first-order-predicate/main
+
+let-inline ctx \dfn jp en = read-inline ctx { \font-style [bold;]{ #jp; }(\font-style [italic;]{ #en; }) }
+let-math \dots = ${\ldots}
+let-math \ltrue = ${true}
+let-math \lfalse = ${false}
+let-math \lnot = math-char MathRel `¬`
+let-math \limp = ${\rightarrow}
+let-math \lequ = math-char MathRel `↔`
+let-math \defeq = math-char MathRel `:=`
+let-math \subformula phi = ${SubF \paren{ #phi}}
+open EnumitemAlias
+in
 
 document(|
-    title = { はじめての\SATySFi; };
-    author = { SnO2WMaN };
-    show-title = false;
-    show-toc = false;
+    title = { 論理学に関して };
+    author = { \SnO2WMaN; };
+    date = { 2022/08/13 };
+    normal-font-size = 12pt;
+    show-title = true;
+    show-toc = true;
+    show-footer = true;
+    show-header = true;
+    show-title-deco = false;
 |)'<
-    +chapter{}<
-        +section{}<
-            +p{ 叫べ心の形を！！ }
-        >
-        +section{ uline }<
-            +p{ \uline{ 下線 }テスト }
+    +chapter{ はじめに }<
+        +p{
+            この文章はNix，GitHub Actionsを用いた継続的\SATySFi;文書執筆のデモを目的として執筆されたものである．
+        }
+    >
+    % +section{ はじめに }<>
+    % #first-order-propositional-chapter;
+    +chapter{ 1階命題論理 }<
+        +p{
+            \dfn{ 1階命題論理 }{ first-order propositional logic } は
+            次のようなことについて考えることが出来る．
+            \listing{
+                * 今日は水曜日だ．
+                * 今日が水曜日ならば，講義がある．
+                * 今日は水曜日でかつ，1 + 1 = 3だ．
+                * 今日が水曜日ならば，今日は水曜日だ．
+            }
+            一方，基本的には次のようなことは考えることは出来ない．
+            \listing{
+                * すべての自然数は奇数または偶数である．
+                * すべての自然数${n}について，それより大きい大きい自然数${n + 1}が存在する．
+            }
+        }
+        +section{ シンタクス }<
+            +subsection{ 記号の定義 }<
+                +definition ?:({ 1階命題論理の記号 }) ?:(`1st-prop:alphabet`){
+                    \listing{
+                        * 命題記号 ${P , Q , R , \ldots}
+                        * 0項真理関数 ${\ltrue , \lfalse}
+                        * 1項真理関数 ${\lnot}
+                        * 2項真理関数 ${\land , \lor , \limp , \lequ}
+                    }
+                }
+                +remark{
+                    個々の命題記号${P , Q , R , \ldots}は，
+                    例えば「今日は水曜日だ」「1 + 1 = 4」などの命題を指す．
+                }
+                +remark{
+                    \dfn{ 真理関数 }{ truth-function }とは，
+                    \ref (`definition:1st-prop:formula`);で定義される論理式を引数に取る関数である．
+                    また，この関数の値域は\ref (`definition:1st-prop:truth-value`);で定義される．
+                }
+                +remark{
+                    括弧${( , )}は，当然存在するものとして記号の定義から省略し，用法も一般的なものと同じものとする．
+                    今後考える論理でも同様に定義から省略する．
+                }
+            >
+            +subsection{ 論理式の定義 }<
+                +definition ?:({ 1階命題論理の論理式 }) ?:(`1st-prop:formula`){
+                    \ref (`definition:1st-prop:alphabet`);で定義された1階命題論理の記号が与えられたとき，次の規則で再帰的に定義される集合を論理式の集合とする．
+                    \enumerate{
+                        * 命題記号${P , Q , R , \dots}
+                        * ${\rho \paren{\phi_1 \dots \phi_n}}
+                          ** ${\rho}は${n}項真理関数．
+                          ** ${\phi_1 \dots \phi_n}は論理式．
+                        * 上記以外は論理式ではない．
+                    }
+                }
+                +remark{
+                    括弧の多さによる煩雑さや順番の非直感的さを避けるなどの目的で，一般に2項演算子については「1 + 1」のように演算子を中置することが多い．
+                    今後，
+                    \ref (`definition:1st-prop:alphabet`);で定義した2項真理関数${\land , \lor , \limp , \lequ}についても，
+                    これに倣って同様に中置することとする．より明示的に定義するなら\ref (`definition:1st-prop:infix`);．
+                }
+                +definition ?:({ 2項真理関数の中置 }) ?:(`1st-prop:infix`){
+                    \enumerate{
+                        * ${\land \paren{\phi,\psi} \defeq \phi \land \psi}
+                        * ${\lor \paren{\phi,\psi} \defeq \phi \lor \psi}
+                        * ${\limp \paren{\phi,\psi} \defeq \phi \limp \psi}
+                        * ${\lequ \paren{\phi,\psi} \defeq \phi \lequ \psi}
+                    }
+                }
+                +remark{
+                    \ref (`definition:1st-prop:alphabet`);で定義した0項真理関数${\ltrue , \lfalse}について，${\ltrue \paren{} , \lfalse \paren{}}は論理式であるが，
+                    長いので，今後はそれぞれを${\top , \bot}と表す．つまり\ref (`definition:1st-prop:top-bot`);．
+                }
+                +definition ?:({ 0項真理関数の略記 }) ?:(`1st-prop:top-bot`){
+                    \enumerate{
+                        * ${\top \defeq \ltrue \paren{}}
+                        * ${\bot \defeq \lfalse \paren{}}
+                    }
+                }
+                +example{
+                    ここまでの定義，注意を踏まえると，次のものは正しく1階命題論理の論理式である．
+                    逆に，次のものは1階命題論理の論理式ではない．
+                }
+                +definition ?:({ 部分論理式 }) ?:(`1st-prop:subformula`){
+                    論理式${\phi}の \dfn{ 部分論理式 }{ subformula }の集合を${\subformula{\phi}} で表し，
+                    以下のように再帰的に定義する．
+                    \enumerate{
+                        * ${\subformula{P} \defeq \brace{ P }}
+                          ** ${P}は命題記号．
+                        * ${\subformula{\rho \paren{\phi_1 \dots \phi_n}} \defeq \brace{\rho \paren{\phi_1 \dots \phi_n} } \cup \brace{ \subformula{\phi_1} } \cup \cdots \cup \brace{ \subformula{\phi_n} }}
+                          ** ${\rho}は${n}項真理関数．
+                          ** ${\phi_1 \dots \phi_n}は論理式．
+                    }
+                }
+            >
         >
     >
+    % #first-order-predicate-chapter;
 >
