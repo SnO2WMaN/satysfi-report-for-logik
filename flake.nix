@@ -1,10 +1,10 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
     devshell.url = "github:numtide/devshell";
     satyxin.url = "github:SnO2WMaN/satyxin";
 
+    flake-utils.url = "github:numtide/flake-utils";
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
@@ -34,6 +34,8 @@
               "uline"
               "bibyfi"
               "fss"
+              "sno2wman"
+              "enumitem"
             ];
           };
           main = pkgs.satyxin.buildDocument {
