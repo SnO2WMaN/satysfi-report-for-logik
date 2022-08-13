@@ -5,8 +5,6 @@
 @require: fss/style
 @require: fss/fonts
 @require: enumitem/enumitem
-@import: ./first-order-propositional/main
-@import: ./first-order-predicate/main
 
 let-inline ctx \dfn jp en = read-inline ctx { \font-style [bold;]{ #jp; }(\font-style [italic;]{ #en; }) }
 let-math \dots = ${\ldots}
