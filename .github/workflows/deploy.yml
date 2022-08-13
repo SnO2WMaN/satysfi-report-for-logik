@@ -1,0 +1,34 @@
+name: gh-pages
+
+on:
+  push:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v17
+      - uses: cachix/cachix-action@v10
+        with:
+          name: sno2wman
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      - run: nix build
+      - uses: actions/upload-pages-artifact@main
+        with:
+          path: result/docs
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v1
