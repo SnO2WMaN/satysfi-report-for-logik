@@ -19,7 +19,7 @@ jobs:
       - run: |
           outdir=$(nix build ".#default" --no-link --json | jq -r ".[0].outputs.out")
           cp -r $outdir ./build
-          chmod 744 ./build
+          chmod 744 ./build/*
       - uses: actions/upload-pages-artifact@v1
         with:
           path: ./build
