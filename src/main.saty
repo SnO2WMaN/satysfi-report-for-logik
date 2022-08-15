@@ -10,7 +10,7 @@ let-inline ctx \dfn jp en = read-inline ctx { \font-style [bold;]{ #jp; }(\font-
 let-math \dots = ${\ldots}
 let-math \ltrue = ${true}
 let-math \lfalse = ${false}
-let-math \lnot = math-char MathRel `¬`
+let-math \lnot = math-char MathOrd `¬`
 let-math \limp = ${\rightarrow}
 let-math \lequ = math-char MathRel `↔`
 let-math \defeq = math-char MathRel `:=`
@@ -65,6 +65,7 @@ document(|
                 +remark{
                     個々の命題記号${P , Q , R , \ldots}は，
                     例えば「今日は水曜日だ」「1 + 1 = 4」などの命題を指す．
+                    ${\lnot P}
                 }
                 +remark{
                     \dfn{ 真理関数 }{ truth-function }とは，
