@@ -19,13 +19,12 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Build & Copy
         run: |
-          outdir=$(nix build ".#default" --no-link --json | jq -r ".[0].outputs.out")
-          cp -r $outdir ./build
-          chmod 755 ./build
-          chmod 644 ./build/*
+          nix build ".#default" -o result
+          mkdir _site
+          cp -rL ./result ./_site
+          chmod 755 ./_site
+          chmod 644 ./_site/**/*
       - uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./build
 
   deploy:
     runs-on: ubuntu-latest
